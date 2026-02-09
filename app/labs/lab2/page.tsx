@@ -20,6 +20,7 @@ import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
 import BootstrapForms from "./BootstrapForms";
 import BootstrapNavigation from "./BootstrapNavigation";
+import TailwindLab from "./tailwind/page";
 
 export default function Lab2() {
   return (
@@ -95,6 +96,7 @@ export default function Lab2() {
       <BootstrapLists />
       <BootstrapForms />
       <BootstrapNavigation />
+      <TailwindLab />
     </Container>
   );
 }

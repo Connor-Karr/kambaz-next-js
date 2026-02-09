@@ -21,6 +21,7 @@ export default function KambazNavigation() {
       >
         <img src="/images/NEU.png" width="75px" alt="Northeastern University" />
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-black text-center">
         <Link
           href="/account"
@@ -32,6 +33,7 @@ export default function KambazNavigation() {
           Account
         </Link>
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-white text-center">
         <Link
           href="/dashboard"
@@ -43,6 +45,7 @@ export default function KambazNavigation() {
           Dashboard
         </Link>
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-black text-center">
         <Link
           href="/dashboard"
@@ -54,6 +57,7 @@ export default function KambazNavigation() {
           Courses
         </Link>
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-black text-center">
         <Link
           href="/calendar"
@@ -65,6 +69,7 @@ export default function KambazNavigation() {
           Calendar
         </Link>
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-black text-center">
         <Link
           href="/inbox"
@@ -76,6 +81,7 @@ export default function KambazNavigation() {
           Inbox
         </Link>
       </ListGroupItem>
+
       <ListGroupItem className="border-0 bg-black text-center">
         <Link
           href="/labs"
