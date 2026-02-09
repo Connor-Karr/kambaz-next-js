@@ -1,27 +1,28 @@
 import {
-  Form,
-  FormGroup,
-  FormLabel,
   FormControl,
+  FormLabel,
   Button,
   Row,
   Col,
+  Form,
 } from "react-bootstrap";
 
 export default function AssignmentEditor() {
   return (
     <div id="wd-assignments-editor" className="p-3">
-      <FormGroup className="mb-3">
-        <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
-        <FormControl id="wd-name" defaultValue="A1 - ENV + HTML" />
-      </FormGroup>
+      <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
+      <FormControl
+        id="wd-name"
+        defaultValue="A1 - ENV + HTML"
+        className="mb-3"
+      />
 
-      <FormGroup className="mb-3">
-        <FormControl
-          as="textarea"
-          id="wd-description"
-          rows={10}
-          defaultValue={`The assignment is available online
+      <FormControl
+        as="textarea"
+        id="wd-description"
+        rows={10}
+        className="mb-3"
+        defaultValue={`The assignment is available online
 
 Submit a link to the landing page of your Web application running on Netlify.
 
@@ -32,8 +33,7 @@ The landing page should include the following:
 - Links to all relevant source code repositories
 
 The Kanbas application should include a link to navigate back to the landing page.`}
-        />
-      </FormGroup>
+      />
 
       <Row className="mb-3">
         <Col md={3}>
@@ -98,7 +98,6 @@ The Kanbas application should include a link to navigate back to the landing pag
               id="wd-website-url"
               label="Website URL"
               className="mb-2"
-              defaultChecked
             />
 
             <Form.Check

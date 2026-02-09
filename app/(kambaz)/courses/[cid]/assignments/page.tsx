@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { BsGripVertical, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { FaRegEdit } from "react-icons/fa";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
@@ -28,10 +27,12 @@ export default function Assignments() {
           </div>
 
           <ListGroup className="rounded-0">
-            <ListGroupItem className="wd-assignment-list-item p-3 ps-1 border border-0">
+            <ListGroupItem
+              className="wd-assignment-list-item p-3 ps-1 border border-0"
+              style={{ borderLeft: "3px solid green" }}
+            >
               <div className="d-flex align-items-center">
                 <BsGripVertical className="me-2 fs-3" />
-                <FaRegEdit className="me-2 fs-5 text-success" />
                 <div className="flex-grow-1">
                   <Link
                     href="/courses/1234/assignments/123"
@@ -51,10 +52,12 @@ export default function Assignments() {
               </div>
             </ListGroupItem>
 
-            <ListGroupItem className="wd-assignment-list-item p-3 ps-1 border border-0">
+            <ListGroupItem
+              className="wd-assignment-list-item p-3 ps-1 border border-0"
+              style={{ borderLeft: "3px solid green" }}
+            >
               <div className="d-flex align-items-center">
                 <BsGripVertical className="me-2 fs-3" />
-                <FaRegEdit className="me-2 fs-5 text-success" />
                 <div className="flex-grow-1">
                   <Link
                     href="/courses/1234/assignments/124"
@@ -74,10 +77,12 @@ export default function Assignments() {
               </div>
             </ListGroupItem>
 
-            <ListGroupItem className="wd-assignment-list-item p-3 ps-1 border border-0">
+            <ListGroupItem
+              className="wd-assignment-list-item p-3 ps-1 border border-0"
+              style={{ borderLeft: "3px solid green" }}
+            >
               <div className="d-flex align-items-center">
                 <BsGripVertical className="me-2 fs-3" />
-                <FaRegEdit className="me-2 fs-5 text-success" />
                 <div className="flex-grow-1">
                   <Link
                     href="/courses/1234/assignments/125"
