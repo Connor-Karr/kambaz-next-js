@@ -42,7 +42,6 @@ export default function Modules() {
           </ListGroup>
         </ListGroupItem>
 
-        {/* Week 2 Module */}
         <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
           <div className="wd-title p-3 ps-2 bg-secondary">
             <BsGripVertical className="me-2 fs-3" />
@@ -71,7 +70,6 @@ export default function Modules() {
           </ListGroup>
         </ListGroupItem>
 
-        {/* Week 3 Module */}
         <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
           <div className="wd-title p-3 ps-2 bg-secondary">
             <BsGripVertical className="me-2 fs-3" />
