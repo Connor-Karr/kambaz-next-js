@@ -22,19 +22,19 @@ export default function Modules() {
           </div>
 
           <ListGroup className="wd-lessons rounded-0">
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               LEARNING OBJECTIVES
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Introduction to the course
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Learn what is Web Development
               <LessonControlButtons />
@@ -50,19 +50,19 @@ export default function Modules() {
           </div>
 
           <ListGroup className="wd-lessons rounded-0">
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               LEARNING OBJECTIVES
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Learn how to style with CSS
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Understand the box model
               <LessonControlButtons />
@@ -78,19 +78,19 @@ export default function Modules() {
           </div>
 
           <ListGroup className="wd-lessons rounded-0">
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               LEARNING OBJECTIVES
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Learn JavaScript fundamentals
               <LessonControlButtons />
             </ListGroupItem>
 
-            <ListGroupItem className="wd-lesson p-3 ps-1 border border-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
               Understand event handling
               <LessonControlButtons />
