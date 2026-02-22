@@ -9,6 +9,7 @@ import ConditionalOutputIfElse from "./ConditionalOutputIfElse";
 import ConditionalOutputInline from "./ConditionalOutputInline";
 import Destructing from "./Destructing";
 import DestructingImports from "./DestructingImports";
+import FilterFunction from "./FilterFunction";
 import FindFunction from "./FindFunction";
 import FindIndex from "./FindIndex";
 import ForLoops from "./ForLoops";
@@ -56,6 +57,7 @@ export default function Lab3() {
       <MapFunction />
       <FindFunction />
       <FindIndex />
+      <FilterFunction />
       <JsonStringify />
       <House />
       <Spreader />

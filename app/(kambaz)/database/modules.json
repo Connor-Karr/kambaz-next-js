@@ -1,0 +1,548 @@
+[
+  {
+    "_id": "M101",
+    "name": "Propulsion Fundamentals",
+    "description": "Basic principles of rocket propulsion",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L101",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M101"
+      },
+      {
+        "_id": "L102",
+        "name": "Rocket Equation",
+        "description": "Understanding the Tsiolkovsky rocket equation",
+        "module": "M101"
+      },
+      {
+        "_id": "L103",
+        "name": "Fuel Types",
+        "description": "Overview of rocket fuel types",
+        "module": "M101"
+      }
+    ]
+  },
+  {
+    "_id": "M102",
+    "name": "Nozzle Design",
+    "description": "Principles of nozzle design and optimization",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L201",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M102"
+      },
+      {
+        "_id": "L202",
+        "name": "Nozzle Types",
+        "description": "Convergent-divergent nozzles",
+        "module": "M102"
+      },
+      {
+        "_id": "L203",
+        "name": "Flow Dynamics",
+        "description": "Gas dynamics in nozzles",
+        "module": "M102"
+      }
+    ]
+  },
+  {
+    "_id": "M103",
+    "name": "Combustion Processes",
+    "description": "Chemical and physical processes of combustion",
+    "course": "RS101",
+    "lessons": [
+      {
+        "_id": "L301",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M103"
+      },
+      {
+        "_id": "L302",
+        "name": "Combustion Chemistry",
+        "description": "Chemical reactions in combustion",
+        "module": "M103"
+      },
+      {
+        "_id": "L303",
+        "name": "Combustion Chambers",
+        "description": "Design of combustion chambers",
+        "module": "M103"
+      }
+    ]
+  },
+  {
+    "_id": "M201",
+    "name": "Fundamentals of Aerodynamics",
+    "description": "Basic aerodynamic principles",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L401",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M201"
+      },
+      {
+        "_id": "L402",
+        "name": "Flow Classification",
+        "description": "Types of aerodynamic flows",
+        "module": "M201"
+      },
+      {
+        "_id": "L403",
+        "name": "Pressure Distribution",
+        "description": "Pressure distribution over bodies",
+        "module": "M201"
+      }
+    ]
+  },
+  {
+    "_id": "M202",
+    "name": "Subsonic and Supersonic Flow",
+    "description": "Flow regimes and characteristics",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L501",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M202"
+      },
+      {
+        "_id": "L502",
+        "name": "Subsonic Aerodynamics",
+        "description": "Principles of subsonic flow",
+        "module": "M202"
+      },
+      {
+        "_id": "L503",
+        "name": "Supersonic Aerodynamics",
+        "description": "Shock waves and expansion fans",
+        "module": "M202"
+      }
+    ]
+  },
+  {
+    "_id": "M203",
+    "name": "Aerodynamic Heating",
+    "description": "Thermal effects in high-speed flight",
+    "course": "RS102",
+    "lessons": [
+      {
+        "_id": "L601",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M203"
+      },
+      {
+        "_id": "L602",
+        "name": "Heat Transfer",
+        "description": "Convective and radiative heating",
+        "module": "M203"
+      },
+      {
+        "_id": "L603",
+        "name": "Thermal Protection",
+        "description": "Thermal protection systems",
+        "module": "M203"
+      }
+    ]
+  },
+  {
+    "_id": "M301",
+    "name": "Spacecraft Structures",
+    "description": "Structural design of spacecraft",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L701",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M301"
+      },
+      {
+        "_id": "L702",
+        "name": "Materials Selection",
+        "description": "Aerospace materials",
+        "module": "M301"
+      },
+      {
+        "_id": "L703",
+        "name": "Load Analysis",
+        "description": "Structural load analysis",
+        "module": "M301"
+      }
+    ]
+  },
+  {
+    "_id": "M302",
+    "name": "Orbital Mechanics",
+    "description": "Principles of orbital mechanics",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L801",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M302"
+      },
+      {
+        "_id": "L802",
+        "name": "Kepler's Laws",
+        "description": "Kepler's laws of planetary motion",
+        "module": "M302"
+      },
+      {
+        "_id": "L803",
+        "name": "Orbital Transfers",
+        "description": "Hohmann transfers and maneuvers",
+        "module": "M302"
+      }
+    ]
+  },
+  {
+    "_id": "M303",
+    "name": "Spacecraft Systems",
+    "description": "Subsystems integration",
+    "course": "RS103",
+    "lessons": [
+      {
+        "_id": "L901",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M303"
+      },
+      {
+        "_id": "L902",
+        "name": "Power Systems",
+        "description": "Spacecraft power generation",
+        "module": "M303"
+      },
+      {
+        "_id": "L903",
+        "name": "Communication Systems",
+        "description": "Spacecraft communications",
+        "module": "M303"
+      }
+    ]
+  },
+  {
+    "_id": "M401",
+    "name": "Organic Compounds",
+    "description": "Structure and naming of organic compounds",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L1001",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M401"
+      },
+      {
+        "_id": "L1002",
+        "name": "Hydrocarbons",
+        "description": "Alkanes, alkenes, and alkynes",
+        "module": "M401"
+      },
+      {
+        "_id": "L1003",
+        "name": "Functional Groups",
+        "description": "Common functional groups",
+        "module": "M401"
+      }
+    ]
+  },
+  {
+    "_id": "M402",
+    "name": "Chemical Reactions",
+    "description": "Types of organic reactions",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L1101",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M402"
+      },
+      {
+        "_id": "L1102",
+        "name": "Substitution Reactions",
+        "description": "SN1 and SN2 reactions",
+        "module": "M402"
+      },
+      {
+        "_id": "L1103",
+        "name": "Elimination Reactions",
+        "description": "E1 and E2 reactions",
+        "module": "M402"
+      }
+    ]
+  },
+  {
+    "_id": "M403",
+    "name": "Spectroscopy",
+    "description": "Spectroscopic methods for organic molecules",
+    "course": "RS104",
+    "lessons": [
+      {
+        "_id": "L1201",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M403"
+      },
+      {
+        "_id": "L1202",
+        "name": "NMR Spectroscopy",
+        "description": "Nuclear magnetic resonance",
+        "module": "M403"
+      },
+      {
+        "_id": "L1203",
+        "name": "IR Spectroscopy",
+        "description": "Infrared spectroscopy",
+        "module": "M403"
+      }
+    ]
+  },
+  {
+    "_id": "M501",
+    "name": "Coordination Chemistry",
+    "description": "Transition metals and coordination compounds",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L1301",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M501"
+      },
+      {
+        "_id": "L1302",
+        "name": "Crystal Field Theory",
+        "description": "Crystal field splitting",
+        "module": "M501"
+      },
+      {
+        "_id": "L1303",
+        "name": "Ligand Field Theory",
+        "description": "MO approach to complexes",
+        "module": "M501"
+      }
+    ]
+  },
+  {
+    "_id": "M502",
+    "name": "Solid State Chemistry",
+    "description": "Structure and properties of solids",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L1401",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M502"
+      },
+      {
+        "_id": "L1402",
+        "name": "Crystal Structures",
+        "description": "Unit cells and lattices",
+        "module": "M502"
+      },
+      {
+        "_id": "L1403",
+        "name": "Band Theory",
+        "description": "Electronic band structure",
+        "module": "M502"
+      }
+    ]
+  },
+  {
+    "_id": "M503",
+    "name": "Bioinorganic Chemistry",
+    "description": "Metals in biological systems",
+    "course": "RS105",
+    "lessons": [
+      {
+        "_id": "L1501",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M503"
+      },
+      {
+        "_id": "L1502",
+        "name": "Metalloproteins",
+        "description": "Metal-containing proteins",
+        "module": "M503"
+      },
+      {
+        "_id": "L1503",
+        "name": "Oxygen Transport",
+        "description": "Hemoglobin and myoglobin",
+        "module": "M503"
+      }
+    ]
+  },
+  {
+    "_id": "M601",
+    "name": "Thermodynamics",
+    "description": "Laws of thermodynamics",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L1601",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M601"
+      },
+      {
+        "_id": "L1602",
+        "name": "First Law",
+        "description": "Energy conservation",
+        "module": "M601"
+      },
+      {
+        "_id": "L1603",
+        "name": "Second Law",
+        "description": "Entropy and spontaneity",
+        "module": "M601"
+      }
+    ]
+  },
+  {
+    "_id": "M602",
+    "name": "Quantum Mechanics",
+    "description": "Quantum theory for chemists",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L1701",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M602"
+      },
+      {
+        "_id": "L1702",
+        "name": "Wave Functions",
+        "description": "Schrodinger equation",
+        "module": "M602"
+      },
+      {
+        "_id": "L1703",
+        "name": "Atomic Orbitals",
+        "description": "Hydrogen atom solutions",
+        "module": "M602"
+      }
+    ]
+  },
+  {
+    "_id": "M603",
+    "name": "Chemical Kinetics",
+    "description": "Rates and mechanisms of reactions",
+    "course": "RS106",
+    "lessons": [
+      {
+        "_id": "L1801",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M603"
+      },
+      {
+        "_id": "L1802",
+        "name": "Rate Laws",
+        "description": "Determining rate laws",
+        "module": "M603"
+      },
+      {
+        "_id": "L1803",
+        "name": "Reaction Mechanisms",
+        "description": "Elementary steps",
+        "module": "M603"
+      }
+    ]
+  },
+  {
+    "_id": "M701",
+    "name": "Ancient Writing Systems",
+    "description": "Early forms of written communication",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L1901",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M701"
+      },
+      {
+        "_id": "L1902",
+        "name": "Cuneiform",
+        "description": "Sumerian writing system",
+        "module": "M701"
+      },
+      {
+        "_id": "L1903",
+        "name": "Hieroglyphics",
+        "description": "Egyptian writing system",
+        "module": "M701"
+      }
+    ]
+  },
+  {
+    "_id": "M702",
+    "name": "Classical Languages",
+    "description": "Greek and Latin foundations",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L2001",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M702"
+      },
+      {
+        "_id": "L2002",
+        "name": "Ancient Greek",
+        "description": "Greek alphabet and grammar",
+        "module": "M702"
+      },
+      {
+        "_id": "L2003",
+        "name": "Latin",
+        "description": "Latin declensions and conjugations",
+        "module": "M702"
+      }
+    ]
+  },
+  {
+    "_id": "M703",
+    "name": "Language Evolution",
+    "description": "How ancient languages evolved",
+    "course": "RS107",
+    "lessons": [
+      {
+        "_id": "L2101",
+        "name": "LEARNING OBJECTIVES",
+        "description": "",
+        "module": "M703"
+      },
+      {
+        "_id": "L2102",
+        "name": "Proto-Indo-European",
+        "description": "Reconstructing ancient languages",
+        "module": "M703"
+      },
+      {
+        "_id": "L2103",
+        "name": "Language Families",
+        "description": "Classification of language families",
+        "module": "M703"
+      }
+    ]
+  }
+]
