@@ -5,7 +5,7 @@ export default function AccountLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <div id="wd-kambaz">
+    <div>
       <div className="d-flex">
         <div>
           <AccountNavigation />

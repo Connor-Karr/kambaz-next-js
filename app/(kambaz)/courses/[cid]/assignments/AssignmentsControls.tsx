@@ -1,19 +1,30 @@
+"use client";
+
 import { FaPlus } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import { Button } from "react-bootstrap";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export default function AssignmentsControls() {
+  const { cid } = useParams();
+
   return (
     <div id="wd-assignments-controls" className="text-nowrap">
-      <Button
-        variant="danger"
-        size="lg"
-        className="me-1 float-end"
-        id="wd-add-assignment"
-      >
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-        Assignment
-      </Button>
+      <Link href={`/courses/${cid}/assignments/new`}>
+        <Button
+          variant="danger"
+          size="lg"
+          className="me-1 float-end"
+          id="wd-add-assignment"
+        >
+          <FaPlus
+            className="position-relative me-2"
+            style={{ bottom: "1px" }}
+          />
+          Assignment
+        </Button>
+      </Link>
 
       <Button
         variant="secondary"
