@@ -30,7 +30,8 @@ export default function Dashboard() {
     ? courses.filter((c: any) =>
         enrollments.some(
           (enrollment: any) =>
-            enrollment.user === currentUser._id && enrollment.course === c._id
+            enrollment.user === (currentUser as any)._id &&
+            enrollment.course === c._id
         )
       )
     : courses;
