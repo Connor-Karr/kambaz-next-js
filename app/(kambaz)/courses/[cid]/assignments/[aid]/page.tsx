@@ -7,6 +7,7 @@ import { RootState } from "../../../../store";
 import { addAssignment, updateAssignment } from "../reducer";
 import { FormControl, Button } from "react-bootstrap";
 
+
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const router = useRouter();
@@ -14,6 +15,9 @@ export default function AssignmentEditor() {
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
+
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = (currentUser as any)?.role === "FACULTY";
 
   const isNew = aid === "new";
   const existingAssignment = assignments.find((a: any) => a._id === aid);
@@ -157,9 +161,11 @@ export default function AssignmentEditor() {
         >
           Cancel
         </Button>
-        <Button variant="danger" onClick={handleSave} id="wd-save">
-          Save
-        </Button>
+        {isFaculty && (
+          <Button variant="danger" onClick={handleSave} id="wd-save">
+            Save
+          </Button>
+        )}
       </div>
     </div>
   );
