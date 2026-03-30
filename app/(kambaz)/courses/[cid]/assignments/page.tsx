@@ -4,13 +4,14 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
-import { deleteAssignment } from "./reducer";
+import { setAssignments } from "./reducer";
 import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { ListGroup, ListGroupItem, Modal, Button } from "react-bootstrap";
 import { PiNotePencil } from "react-icons/pi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as coursesClient from "../../client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -22,14 +23,30 @@ export default function Assignments() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<any>(null);
 
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(
+      cid as string
+    );
+    dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
   const handleDeleteClick = (assignment: any) => {
     setAssignmentToDelete(assignment);
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (assignmentToDelete) {
-      dispatch(deleteAssignment(assignmentToDelete._id));
+      await coursesClient.deleteAssignment(assignmentToDelete._id);
+      dispatch(
+        setAssignments(
+          assignments.filter((a: any) => a._id !== assignmentToDelete._id)
+        )
+      );
     }
     setShowDeleteDialog(false);
     setAssignmentToDelete(null);

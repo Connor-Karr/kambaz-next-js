@@ -5,27 +5,30 @@ import { redirect } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import * as db from "../../database";
 import { FormControl, Button } from "react-bootstrap";
+import * as client from "../client";
 
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
-  const signin = () => {
-    const user = db.users.find(
-      (u: any) =>
-        u.username === credentials.username &&
-        u.password === credentials.password
-    );
-    if (!user) return;
-    dispatch(setCurrentUser(user));
+  const signin = async () => {
+    try {
+      const user = await client.signin(credentials);
+      if (!user) return;
+      dispatch(setCurrentUser(user));
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Unable to sign in");
+      return;
+    }
     redirect("/dashboard");
   };
 
   return (
     <div id="wd-signin-screen">
       <h1>Sign in</h1>
+      {error && <div className="alert alert-danger">{error}</div>}
       <FormControl
         defaultValue={credentials.username}
         onChange={(e) =>
