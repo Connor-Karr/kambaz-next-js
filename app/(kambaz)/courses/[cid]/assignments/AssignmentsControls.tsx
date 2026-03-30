@@ -6,11 +6,13 @@ import { Button } from "react-bootstrap";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../store";
+import { RootState } from "../../../store";
 
 export default function AssignmentsControls() {
   const { cid } = useParams();
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
   const isFaculty = (currentUser as any)?.role === "FACULTY";
 
   return (
@@ -38,7 +40,10 @@ export default function AssignmentsControls() {
             className="me-1 float-end"
             id="wd-add-assignment-group"
           >
-            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+            <FaPlus
+              className="position-relative me-2"
+              style={{ bottom: "1px" }}
+            />
             Group
           </Button>
         </>
