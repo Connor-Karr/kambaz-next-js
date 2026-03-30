@@ -12,7 +12,7 @@ import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
 import ModuleEditor from "./ModuleEditor";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../store";
+import { RootState } from "../../../store";
 
 export default function ModulesControls({
   moduleName,
@@ -26,14 +26,19 @@ export default function ModulesControls({
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
   const isFaculty = (currentUser as any)?.role === "FACULTY";
 
   return (
     <div id="wd-modules-controls" className="text-nowrap">
       {isFaculty && (
         <Button variant="danger" onClick={handleShow}>
-          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+          <FaPlus
+            className="position-relative me-2"
+            style={{ bottom: "1px" }}
+          />
           Module
         </Button>
       )}
