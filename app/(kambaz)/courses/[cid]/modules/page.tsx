@@ -5,12 +5,7 @@ import { useParams } from "next/navigation";
 import { ListGroup, FormControl } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setModules,
-  editModule,
-  updateModule,
-  deleteModule,
-} from "./reducer";
+import { setModules, editModule, updateModule, deleteModule } from "./reducer";
 import { RootState } from "../../../store";
 import ModulesControls from "./ModulesControls";
 import ModuleControlButtons from "./ModuleControlButtons";
@@ -44,12 +39,12 @@ export default function Modules() {
   };
 
   const onRemoveModule = async (moduleId: string) => {
-    await coursesClient.deleteModule(moduleId);
+    await coursesClient.deleteModule(cid as string, moduleId);
     dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
   };
 
   const onUpdateModule = async (module: any) => {
-    await coursesClient.updateModule(module);
+    await coursesClient.updateModule(cid as string, module);
     const newModules = modules.map((m: any) =>
       m._id === module._id ? module : m
     );
@@ -79,9 +74,7 @@ export default function Modules() {
                 <FormControl
                   className="w-50 d-inline-block"
                   onChange={(e) =>
-                    dispatch(
-                      updateModule({ ...module, name: e.target.value })
-                    )
+                    dispatch(updateModule({ ...module, name: e.target.value }))
                   }
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {

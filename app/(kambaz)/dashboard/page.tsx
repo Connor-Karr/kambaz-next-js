@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   const fetchCourses = async () => {
     try {
-      const myCourses = await courseClient.findMyCourses();
+      const myCourses = await courseClient.findCoursesForUser("current");
       dispatch(setCourses(myCourses));
       setEnrolledCourseIds(myCourses.map((c: any) => c._id));
     } catch (error) {
@@ -88,17 +88,17 @@ export default function Dashboard() {
   };
 
   const handleEnroll = async (courseId: string) => {
-    await courseClient.enrollInCourse(courseId);
+    await courseClient.enrollIntoCourse("current", courseId);
     // Refresh enrolled courses from server
-    const myCourses = await courseClient.findMyCourses();
+    const myCourses = await courseClient.findCoursesForUser("current");
     dispatch(setCourses(myCourses));
     setEnrolledCourseIds(myCourses.map((c: any) => c._id));
   };
 
   const handleUnenroll = async (courseId: string) => {
-    await courseClient.unenrollFromCourse(courseId);
+    await courseClient.unenrollFromCourse("current", courseId);
     // Refresh enrolled courses from server
-    const myCourses = await courseClient.findMyCourses();
+    const myCourses = await courseClient.findCoursesForUser("current");
     dispatch(setCourses(myCourses));
     setEnrolledCourseIds(myCourses.map((c: any) => c._id));
   };
@@ -158,7 +158,8 @@ export default function Dashboard() {
       )}
       <hr />
       <h2 id="wd-dashboard-published">
-        {showAllCourses ? "All Courses" : "Published Courses"} ({displayedCourses.length})
+        {showAllCourses ? "All Courses" : "Published Courses"} (
+        {displayedCourses.length})
       </h2>
       <hr />
       <div className="row">
@@ -192,8 +193,8 @@ export default function Dashboard() {
                     </p>
                     <button className="btn btn-primary">Go</button>
 
-                    {showAllCourses && (
-                      enrolledCourseIds.includes(c._id) ? (
+                    {showAllCourses &&
+                      (enrolledCourseIds.includes(c._id) ? (
                         <button
                           onClick={(event) => {
                             event.preventDefault();
@@ -213,8 +214,7 @@ export default function Dashboard() {
                         >
                           Enroll
                         </button>
-                      )
-                    )}
+                      ))}
 
                     {!showAllCourses && isFaculty && (
                       <>

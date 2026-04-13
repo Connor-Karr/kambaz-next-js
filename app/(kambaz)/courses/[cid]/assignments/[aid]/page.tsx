@@ -8,7 +8,6 @@ import { addAssignment, updateAssignment } from "../reducer";
 import { FormControl, Button } from "react-bootstrap";
 import * as coursesClient from "../../../client";
 
-
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const router = useRouter();
@@ -17,7 +16,9 @@ export default function AssignmentEditor() {
     (state: RootState) => state.assignmentsReducer
   );
 
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
   const isFaculty = (currentUser as any)?.role === "FACULTY";
 
   const isNew = aid === "new";
@@ -41,7 +42,10 @@ export default function AssignmentEditor() {
 
   const handleSave = async () => {
     if (isNew) {
-      const created = await coursesClient.createAssignmentForCourse(cid as string, assignment);
+      const created = await coursesClient.createAssignment(
+        cid as string,
+        assignment
+      );
       dispatch(addAssignment(created));
     } else {
       await coursesClient.updateAssignment(assignment);
