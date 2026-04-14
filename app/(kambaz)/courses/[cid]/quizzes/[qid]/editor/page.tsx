@@ -39,15 +39,23 @@ export default function QuizEditor() {
     course: cid,
   });
 
+  const fetchQuiz = async () => {
+    if (qid && qid !== "new") {
+      const data = await quizClient.findQuizById(qid as string);
+      if (data) setQuiz(data);
+    }
+  };
+
   useEffect(() => {
-    const fetchQuiz = async () => {
-      if (qid && qid !== "new") {
-        const data = await quizClient.findQuizById(qid as string);
-        if (data) setQuiz(data);
-      }
-    };
     fetchQuiz();
   }, [qid]);
+
+  // Re-fetch quiz when switching back to details tab (to pick up updated points/numberOfQuestions)
+  useEffect(() => {
+    if (activeTab === "details" && qid && qid !== "new") {
+      fetchQuiz();
+    }
+  }, [activeTab]);
 
   const handleSave = async () => {
     if (qid === "new") {
@@ -55,18 +63,33 @@ export default function QuizEditor() {
       dispatch(addQuiz(created));
       router.push(`/courses/${cid}/quizzes/${created._id}`);
     } else {
-      await quizClient.updateQuiz(quiz);
-      dispatch(updateQuizAction(quiz));
+      // Re-fetch the quiz from server to get latest points/numberOfQuestions
+      const freshQuiz = await quizClient.findQuizById(qid as string);
+      const quizToSave = {
+        ...quiz,
+        points: freshQuiz?.points ?? quiz.points,
+        numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
+      };
+      await quizClient.updateQuiz(quizToSave);
+      dispatch(updateQuizAction(quizToSave));
       router.push(`/courses/${cid}/quizzes/${qid}`);
     }
   };
 
   const handleSaveAndPublish = async () => {
-    const updatedQuiz = { ...quiz, published: true };
     if (qid === "new") {
+      const updatedQuiz = { ...quiz, published: true };
       const created = await quizClient.createQuiz(cid as string, updatedQuiz);
       dispatch(addQuiz(created));
     } else {
+      // Re-fetch the quiz from server to get latest points/numberOfQuestions
+      const freshQuiz = await quizClient.findQuizById(qid as string);
+      const updatedQuiz = {
+        ...quiz,
+        published: true,
+        points: freshQuiz?.points ?? quiz.points,
+        numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
+      };
       await quizClient.updateQuiz(updatedQuiz);
       dispatch(updateQuizAction(updatedQuiz));
     }
@@ -141,10 +164,11 @@ export default function QuizEditor() {
             <FormControl
               type="number"
               value={quiz.points}
-              onChange={(e) =>
-                setQuiz({ ...quiz, points: parseInt(e.target.value) || 0 })
-              }
+              disabled
             />
+            <Form.Text className="text-muted">
+              Points are automatically calculated from the total points of all questions.
+            </Form.Text>
           </div>
 
           <div className="mb-3">

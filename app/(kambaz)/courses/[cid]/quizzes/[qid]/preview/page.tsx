@@ -83,6 +83,23 @@ export default function QuizPreview() {
     setAnswers({ ...answers, [questionId]: answer });
   };
 
+  // For multiple choice with multiple correct answers: toggle selection
+  const handleMCToggle = (questionId: string, choiceText: string) => {
+    const current = answers[questionId] || [];
+    const arr = Array.isArray(current) ? current : [];
+    if (arr.includes(choiceText)) {
+      setAnswers({ ...answers, [questionId]: arr.filter((t: string) => t !== choiceText) });
+    } else {
+      setAnswers({ ...answers, [questionId]: [...arr, choiceText] });
+    }
+  };
+
+  // For fill in the blank with multiple blanks
+  const handleFIBChange = (questionId: string, blankIndex: number, value: string) => {
+    const current = answers[questionId] || {};
+    setAnswers({ ...answers, [questionId]: { ...current, [blankIndex]: value } });
+  };
+
   const handleSubmit = async () => {
     const answerArray = questions.map((q) => ({
       question: q._id,
@@ -93,19 +110,39 @@ export default function QuizPreview() {
       // Faculty preview - grade locally without saving
       let score = 0;
       const gradedAnswers = answerArray.map((sa) => {
-        const question = questions.find((q) => q._id === sa.question);
+        const question = questions.find((q: any) => q._id === sa.question);
         if (!question) return { ...sa, correct: false };
         let isCorrect = false;
+
         if (question.questionType === "Multiple Choice") {
-          const correctChoice = question.choices.find((c: any) => c.isCorrect);
-          isCorrect = correctChoice && sa.answer === correctChoice.text;
+          // Multiple correct: compare arrays
+          const correctTexts = (question.choices || [])
+            .filter((c: any) => c.isCorrect)
+            .map((c: any) => c.text)
+            .sort();
+          const userSelected = Array.isArray(sa.answer)
+            ? [...sa.answer].sort()
+            : [sa.answer].filter(Boolean).sort();
+          isCorrect =
+            correctTexts.length === userSelected.length &&
+            correctTexts.every((t: string, i: number) => t === userSelected[i]);
         } else if (question.questionType === "True False") {
           isCorrect = sa.answer === question.trueFalseAnswer;
         } else if (question.questionType === "Fill in the Blank") {
-          const userAnswer = (sa.answer || "").toString().trim().toLowerCase();
-          isCorrect = question.blanks.some(
-            (b: string) => b.trim().toLowerCase() === userAnswer
-          );
+          // Multiple blanks: check each blank
+          const userAnswers = sa.answer || {};
+          const blanks = question.blanks || [];
+          if (blanks.length === 0) {
+            isCorrect = true;
+          } else {
+            isCorrect = blanks.every((blank: any, index: number) => {
+              const userAns = (userAnswers[index] || "").toString().trim().toLowerCase();
+              if (!userAns) return false;
+              return (blank.answers || []).some(
+                (a: string) => a.trim().toLowerCase() === userAns
+              );
+            });
+          }
         }
         if (isCorrect) score += question.points || 0;
         return { ...sa, correct: isCorrect };
@@ -158,7 +195,7 @@ export default function QuizPreview() {
   }
 
   const currentQuestion = questions[currentIndex];
-  const totalPoints = questions.reduce((sum, q) => sum + (q.points || 0), 0);
+  const totalPoints = questions.reduce((sum: number, q: any) => sum + (q.points || 0), 0);
 
   return (
     <div id="wd-quiz-preview" className="p-3">
@@ -199,7 +236,7 @@ export default function QuizPreview() {
       <div className="d-flex">
         <div className="me-3" style={{ minWidth: "120px" }}>
           <h6>Questions</h6>
-          {questions.map((q, i) => {
+          {questions.map((q: any, i: number) => {
             const result = getAnswerResult(q._id);
             return (
               <div
@@ -238,13 +275,15 @@ export default function QuizPreview() {
               <h5>{currentQuestion.title}</h5>
               <p>{currentQuestion.question}</p>
 
-              {/* Multiple Choice */}
+              {/* Multiple Choice - checkboxes for multiple correct answers */}
               {currentQuestion.questionType === "Multiple Choice" && (
                 <div>
                   {(currentQuestion.choices || []).map(
                     (choice: any, i: number) => {
-                      const isSelected = answers[currentQuestion._id] === choice.text;
-                      const result = getAnswerResult(currentQuestion._id);
+                      const selectedArr = Array.isArray(answers[currentQuestion._id])
+                        ? answers[currentQuestion._id]
+                        : [];
+                      const isSelected = selectedArr.includes(choice.text);
                       let borderClass = "";
                       if (submitted) {
                         if (choice.isCorrect) borderClass = "border-success";
@@ -257,15 +296,12 @@ export default function QuizPreview() {
                           className={`p-2 mb-2 border rounded ${borderClass}`}
                         >
                           <Form.Check
-                            type="radio"
+                            type="checkbox"
                             name={`mc-${currentQuestion._id}`}
                             label={choice.text}
                             checked={isSelected}
                             onChange={() =>
-                              handleAnswerChange(
-                                currentQuestion._id,
-                                choice.text
-                              )
+                              handleMCToggle(currentQuestion._id, choice.text)
                             }
                             disabled={submitted}
                           />
@@ -312,22 +348,38 @@ export default function QuizPreview() {
                 </div>
               )}
 
-              {/* Fill in the Blank */}
+              {/* Fill in the Blank - multiple blanks */}
               {currentQuestion.questionType === "Fill in the Blank" && (
                 <div>
-                  <FormControl
-                    value={answers[currentQuestion._id] || ""}
-                    onChange={(e) =>
-                      handleAnswerChange(currentQuestion._id, e.target.value)
+                  {(currentQuestion.blanks || []).map(
+                    (blank: any, blankIndex: number) => {
+                      const userAnswers = answers[currentQuestion._id] || {};
+                      return (
+                        <div key={blankIndex} className="mb-3">
+                          <label className="form-label fw-bold">
+                            {blank.text || `Blank ${blankIndex + 1}`}:
+                          </label>
+                          <FormControl
+                            value={userAnswers[blankIndex] || ""}
+                            onChange={(e) =>
+                              handleFIBChange(
+                                currentQuestion._id,
+                                blankIndex,
+                                e.target.value
+                              )
+                            }
+                            placeholder="Type your answer here"
+                            disabled={submitted}
+                          />
+                          {submitted && (
+                            <div className="mt-1 text-muted small">
+                              Correct answers:{" "}
+                              {(blank.answers || []).join(", ")}
+                            </div>
+                          )}
+                        </div>
+                      );
                     }
-                    placeholder="Type your answer here"
-                    disabled={submitted}
-                  />
-                  {submitted && (
-                    <div className="mt-2 text-muted small">
-                      Correct answers:{" "}
-                      {(currentQuestion.blanks || []).join(", ")}
-                    </div>
                   )}
                 </div>
               )}

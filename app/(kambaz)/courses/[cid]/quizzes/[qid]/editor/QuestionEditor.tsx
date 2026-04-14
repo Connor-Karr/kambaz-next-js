@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as quizClient from "../../client";
 import {
   Button,
@@ -28,11 +28,16 @@ export default function QuestionEditor({
   const [questions, setQuestions] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingQuestion, setEditingQuestion] = useState<any>(null);
+
+  // Track the original snapshot of questions when the tab was loaded
+  const originalQuestionsRef = useRef<any[]>([]);
+
   const totalPoints = questions.reduce((sum, q) => sum + (q.points || 0), 0);
 
   const fetchQuestions = async () => {
     const data = await quizClient.findQuestionsForQuiz(quizId);
     setQuestions(data);
+    originalQuestionsRef.current = JSON.parse(JSON.stringify(data));
   };
 
   useEffect(() => {
@@ -52,7 +57,7 @@ export default function QuestionEditor({
         { text: "Option 4", isCorrect: false },
       ],
       trueFalseAnswer: true,
-      blanks: [""],
+      blanks: [{ text: "Blank 1", answers: [""] }],
     };
     const created = await quizClient.createQuestion(quizId, newQuestion);
     setQuestions([...questions, created]);
@@ -71,7 +76,7 @@ export default function QuestionEditor({
 
   const handleEditClick = (question: any) => {
     setEditingId(question._id);
-    setEditingQuestion({ ...question });
+    setEditingQuestion(JSON.parse(JSON.stringify(question)));
   };
 
   const handleCancelEdit = () => {
@@ -91,7 +96,37 @@ export default function QuestionEditor({
     setEditingQuestion(null);
   };
 
-  // Choice helpers for Multiple Choice
+  // Cancel button for the whole Questions tab: revert to original snapshot
+  const handleCancelQuestions = async () => {
+    const originalIds = originalQuestionsRef.current.map((q) => q._id);
+    const currentIds = questions.map((q) => q._id);
+
+    // Delete any questions that were added (not in original)
+    const addedIds = currentIds.filter((id) => !originalIds.includes(id));
+    for (const id of addedIds) {
+      await quizClient.deleteQuestion(quizId, id);
+    }
+
+    // Re-create any questions that were deleted (in original but not current)
+    const deletedQuestions = originalQuestionsRef.current.filter(
+      (q) => !currentIds.includes(q._id)
+    );
+    for (const q of deletedQuestions) {
+      await quizClient.createQuestion(quizId, q);
+    }
+
+    // Restore any edited questions back to original state
+    for (const origQ of originalQuestionsRef.current) {
+      if (currentIds.includes(origQ._id)) {
+        await quizClient.updateQuestion(quizId, origQ);
+      }
+    }
+
+    // Navigate away (don't save quiz details changes either from this tab)
+    onCancel();
+  };
+
+  // Choice helpers for Multiple Choice (now supports multiple correct via checkbox)
   const addChoice = () => {
     if (!editingQuestion) return;
     setEditingQuestion({
@@ -119,36 +154,69 @@ export default function QuestionEditor({
     setEditingQuestion({ ...editingQuestion, choices: newChoices });
   };
 
-  const setCorrectChoice = (index: number) => {
+  const toggleCorrectChoice = (index: number) => {
     if (!editingQuestion) return;
-    const newChoices = editingQuestion.choices.map((c: any, i: number) => ({
-      ...c,
-      isCorrect: i === index,
-    }));
+    const newChoices = editingQuestion.choices.map((c: any, i: number) =>
+      i === index ? { ...c, isCorrect: !c.isCorrect } : c
+    );
     setEditingQuestion({ ...editingQuestion, choices: newChoices });
   };
 
-  // Blank helpers for Fill in the Blank
+  // Blank helpers for Fill in the Blank (multiple blanks, each with own answers)
   const addBlank = () => {
     if (!editingQuestion) return;
+    const blanks = editingQuestion.blanks || [];
     setEditingQuestion({
       ...editingQuestion,
-      blanks: [...(editingQuestion.blanks || []), ""],
+      blanks: [...blanks, { text: `Blank ${blanks.length + 1}`, answers: [""] }],
     });
   };
 
   const removeBlank = (index: number) => {
     if (!editingQuestion) return;
-    const newBlanks = editingQuestion.blanks.filter(
+    const newBlanks = (editingQuestion.blanks || []).filter(
       (_: any, i: number) => i !== index
     );
     setEditingQuestion({ ...editingQuestion, blanks: newBlanks });
   };
 
-  const updateBlank = (index: number, text: string) => {
+  const updateBlankText = (index: number, text: string) => {
     if (!editingQuestion) return;
-    const newBlanks = editingQuestion.blanks.map((b: string, i: number) =>
-      i === index ? text : b
+    const newBlanks = (editingQuestion.blanks || []).map((b: any, i: number) =>
+      i === index ? { ...b, text } : b
+    );
+    setEditingQuestion({ ...editingQuestion, blanks: newBlanks });
+  };
+
+  const addBlankAnswer = (blankIndex: number) => {
+    if (!editingQuestion) return;
+    const newBlanks = (editingQuestion.blanks || []).map((b: any, i: number) =>
+      i === blankIndex ? { ...b, answers: [...(b.answers || []), ""] } : b
+    );
+    setEditingQuestion({ ...editingQuestion, blanks: newBlanks });
+  };
+
+  const removeBlankAnswer = (blankIndex: number, answerIndex: number) => {
+    if (!editingQuestion) return;
+    const newBlanks = (editingQuestion.blanks || []).map((b: any, i: number) =>
+      i === blankIndex
+        ? { ...b, answers: b.answers.filter((_: any, ai: number) => ai !== answerIndex) }
+        : b
+    );
+    setEditingQuestion({ ...editingQuestion, blanks: newBlanks });
+  };
+
+  const updateBlankAnswer = (blankIndex: number, answerIndex: number, text: string) => {
+    if (!editingQuestion) return;
+    const newBlanks = (editingQuestion.blanks || []).map((b: any, i: number) =>
+      i === blankIndex
+        ? {
+            ...b,
+            answers: b.answers.map((a: string, ai: number) =>
+              ai === answerIndex ? text : a
+            ),
+          }
+        : b
     );
     setEditingQuestion({ ...editingQuestion, blanks: newBlanks });
   };
@@ -249,10 +317,13 @@ export default function QuestionEditor({
             />
           </div>
 
-          {/* Multiple Choice */}
+          {/* Multiple Choice - now uses checkboxes for multiple correct answers */}
           {editingQuestion.questionType === "Multiple Choice" && (
             <div className="mb-3">
               <label className="form-label fw-bold">Answers</label>
+              <p className="text-muted small mb-2">
+                Check all correct answers (multiple selections allowed)
+              </p>
               {(editingQuestion.choices || []).map(
                 (choice: any, index: number) => (
                   <div
@@ -260,10 +331,9 @@ export default function QuestionEditor({
                     className="d-flex align-items-center mb-2"
                   >
                     <Form.Check
-                      type="radio"
-                      name="correctChoice"
+                      type="checkbox"
                       checked={choice.isCorrect}
-                      onChange={() => setCorrectChoice(index)}
+                      onChange={() => toggleCorrectChoice(index)}
                       className="me-2"
                       label=""
                     />
@@ -331,38 +401,89 @@ export default function QuestionEditor({
             </div>
           )}
 
-          {/* Fill in the Blank */}
+          {/* Fill in the Blank - multiple blanks, each with own possible answers */}
           {editingQuestion.questionType === "Fill in the Blank" && (
             <div className="mb-3">
-              <label className="form-label fw-bold">
-                Possible Correct Answers
-              </label>
+              <label className="form-label fw-bold">Blanks</label>
+              <p className="text-muted small mb-2">
+                Add multiple blanks, each with their own set of accepted answers
+              </p>
               {(editingQuestion.blanks || []).map(
-                (blank: string, index: number) => (
-                  <div
-                    key={index}
-                    className="d-flex align-items-center mb-2"
-                  >
-                    <span className="me-2 text-muted small">
-                      Possible Answer {index + 1}
-                    </span>
-                    <FormControl
-                      value={blank}
-                      onChange={(e) => updateBlank(index, e.target.value)}
-                      className="me-2"
-                    />
-                    <Button
-                      variant="link"
-                      className="text-danger"
-                      onClick={() => removeBlank(index)}
-                    >
-                      <FaTrash />
-                    </Button>
-                  </div>
+                (blank: any, blankIndex: number) => (
+                  <Card key={blankIndex} className="mb-3 border">
+                    <Card.Body>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <div className="d-flex align-items-center flex-grow-1 me-2">
+                          <span className="me-2 fw-bold small">
+                            Blank {blankIndex + 1}:
+                          </span>
+                          <FormControl
+                            value={blank.text || blank || ""}
+                            onChange={(e) =>
+                              updateBlankText(blankIndex, e.target.value)
+                            }
+                            placeholder="Blank label"
+                            size="sm"
+                          />
+                        </div>
+                        <Button
+                          variant="link"
+                          className="text-danger"
+                          onClick={() => removeBlank(blankIndex)}
+                        >
+                          <FaTrash />
+                        </Button>
+                      </div>
+                      <div className="ms-4">
+                        <label className="form-label text-muted small">
+                          Possible Correct Answers:
+                        </label>
+                        {(blank.answers || []).map(
+                          (answer: string, answerIndex: number) => (
+                            <div
+                              key={answerIndex}
+                              className="d-flex align-items-center mb-1"
+                            >
+                              <FormControl
+                                value={answer}
+                                onChange={(e) =>
+                                  updateBlankAnswer(
+                                    blankIndex,
+                                    answerIndex,
+                                    e.target.value
+                                  )
+                                }
+                                placeholder={`Answer ${answerIndex + 1}`}
+                                size="sm"
+                                className="me-2"
+                              />
+                              <Button
+                                variant="link"
+                                size="sm"
+                                className="text-danger p-0"
+                                onClick={() =>
+                                  removeBlankAnswer(blankIndex, answerIndex)
+                                }
+                              >
+                                <FaTrash />
+                              </Button>
+                            </div>
+                          )
+                        )}
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={() => addBlankAnswer(blankIndex)}
+                        >
+                          <FaPlus className="me-1" /> Add Answer
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
                 )
               )}
               <Button variant="link" onClick={addBlank}>
-                <FaPlus className="me-1" /> Add Possible Answer
+                <FaPlus className="me-1" /> Add Blank
               </Button>
             </div>
           )}
@@ -412,7 +533,7 @@ export default function QuestionEditor({
 
       <hr />
       <div className="d-flex justify-content-end">
-        <Button variant="secondary" className="me-2" onClick={onCancel}>
+        <Button variant="secondary" className="me-2" onClick={handleCancelQuestions}>
           Cancel
         </Button>
         <Button variant="primary" className="me-2" onClick={onSaveAndPublish}>
