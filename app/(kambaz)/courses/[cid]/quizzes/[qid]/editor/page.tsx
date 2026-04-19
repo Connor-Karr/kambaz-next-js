@@ -66,17 +66,24 @@ export default function QuizEditor() {
     })();
   }, [activeTab, qid]);
 
+  const buildQuizToSave = async (overrides: object = {}) => {
+    const questions: { points?: number }[] = await quizClient.findQuestionsForQuiz(qid as string);
+    const total = questions.reduce((sum, q) => sum + (q.points || 0), 0);
+    return {
+      ...quiz,
+      points: total,
+      numberOfQuestions: questions.length,
+      ...overrides,
+    };
+  };
+
   const handleSave = async () => {
     if (qid === "new") {
       const created = await quizClient.createQuiz(cid as string, quiz);
       dispatch(addQuiz(created));
       router.push(`/courses/${cid}/quizzes/${created._id}`);
     } else {
-      const freshQuiz = await quizClient.findQuizById(qid as string);
-      const quizToSave = {
-        ...quiz,
-        numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
-      };
+      const quizToSave = await buildQuizToSave();
       await quizClient.updateQuiz(quizToSave);
       dispatch(updateQuizAction(quizToSave));
       router.push(`/courses/${cid}/quizzes/${qid}`);
@@ -89,14 +96,9 @@ export default function QuizEditor() {
       const created = await quizClient.createQuiz(cid as string, updatedQuiz);
       dispatch(addQuiz(created));
     } else {
-      const freshQuiz = await quizClient.findQuizById(qid as string);
-      const updatedQuiz = {
-        ...quiz,
-        published: true,
-        numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
-      };
-      await quizClient.updateQuiz(updatedQuiz);
-      dispatch(updateQuizAction(updatedQuiz));
+      const quizToSave = await buildQuizToSave({ published: true });
+      await quizClient.updateQuiz(quizToSave);
+      dispatch(updateQuizAction(quizToSave));
     }
     router.push(`/courses/${cid}/quizzes`);
   };
