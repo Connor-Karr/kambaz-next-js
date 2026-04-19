@@ -53,7 +53,7 @@ export default function QuizDetails() {
   };
 
   const canTakeQuiz = () => {
-    if (!quiz) return false;
+    if (!quiz || !quiz.published) return false;
     if (quiz.multipleAttempts) {
       return attemptCount < (quiz.howManyAttempts || 1);
     }
@@ -91,7 +91,9 @@ export default function QuizDetails() {
         )}
         {!isFaculty && (
           <>
-            {canTakeQuiz() ? (
+            {!quiz.published ? (
+              <span className="text-muted fst-italic">This quiz is not published yet</span>
+            ) : canTakeQuiz() ? (
               <Button
                 variant="danger"
                 onClick={() => router.push(`/courses/${cid}/quizzes/${qid}/preview`)}

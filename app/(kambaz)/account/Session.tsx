@@ -9,19 +9,19 @@ export default function Session({ children }: { children: any }) {
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
 
-  const fetchProfile = async () => {
-    try {
-      const currentUser = await client.profile();
-      dispatch(setCurrentUser(currentUser));
-    } catch (err: any) {
-      console.error(err);
-    }
-    setPending(false);
-  };
-
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    (async () => {
+      try {
+        const currentUser = await client.profile();
+        dispatch(setCurrentUser(currentUser));
+      } catch (err) {
+        if ((err as { response?: { status?: number } })?.response?.status !== 401) {
+          console.error(err);
+        }
+      }
+      setPending(false);
+    })();
+  }, [dispatch]);
 
   if (!pending) {
     return children;

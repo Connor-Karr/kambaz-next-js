@@ -61,7 +61,7 @@ export default function Quizzes() {
       published: false,
     });
     dispatch(setQuizzes([...quizzes, newQuiz]));
-    router.push(`/courses/${cid}/quizzes/${newQuiz._id}`);
+    router.push(`/courses/${cid}/quizzes/${newQuiz._id}/editor`);
   };
 
   const handleDeleteClick = (quiz: any) => {
@@ -108,7 +108,6 @@ export default function Quizzes() {
   // Sort by available date
   const sortedQuizzes = [...quizzes]
     .filter((q: any) => q.course === cid)
-    .filter((q: any) => isFaculty || q.published)
     .sort((a: any, b: any) => {
       const dateA = a.availableDate ? new Date(a.availableDate).getTime() : 0;
       const dateB = b.availableDate ? new Date(b.availableDate).getTime() : 0;

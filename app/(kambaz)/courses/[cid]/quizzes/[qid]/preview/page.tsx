@@ -194,6 +194,18 @@ export default function QuizPreview() {
     );
   }
 
+  if (!isFaculty && !quiz.published) {
+    return (
+      <div className="p-3">
+        <h3>{quiz.title}</h3>
+        <p className="text-muted fst-italic">This quiz is not published yet.</p>
+        <Button variant="secondary" onClick={() => router.push(`/courses/${cid}/quizzes/${qid}`)}>
+          Back to Quiz Details
+        </Button>
+      </div>
+    );
+  }
+
   const currentQuestion = questions[currentIndex];
   const totalPoints = questions.reduce((sum: number, q: any) => sum + (q.points || 0), 0);
 

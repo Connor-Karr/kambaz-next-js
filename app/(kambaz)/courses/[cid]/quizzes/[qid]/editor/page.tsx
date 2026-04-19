@@ -17,6 +17,7 @@ export default function QuizEditor() {
   const isFaculty = (currentUser as any)?.role === "FACULTY";
 
   const [activeTab, setActiveTab] = useState("details");
+  const [calculatedPoints, setCalculatedPoints] = useState(0);
   const [quiz, setQuiz] = useState<any>({
     title: "Unnamed Quiz",
     description: "",
@@ -39,23 +40,31 @@ export default function QuizEditor() {
     course: cid,
   });
 
-  const fetchQuiz = async () => {
-    if (qid && qid !== "new") {
-      const data = await quizClient.findQuizById(qid as string);
-      if (data) setQuiz(data);
-    }
-  };
-
   useEffect(() => {
-    fetchQuiz();
+    if (!qid || qid === "new") return;
+    (async () => {
+      const data = await quizClient.findQuizById(qid as string);
+      if (data) {
+        setQuiz(data);
+        setCalculatedPoints(data.points ?? 0);
+      }
+    })();
   }, [qid]);
 
-  // Re-fetch quiz when switching back to details tab (to pick up updated points/numberOfQuestions)
   useEffect(() => {
-    if (activeTab === "details" && qid && qid !== "new") {
-      fetchQuiz();
-    }
-  }, [activeTab]);
+    if (activeTab !== "details" || !qid || qid === "new") return;
+    (async () => {
+      const [data, questions] = await Promise.all([
+        quizClient.findQuizById(qid as string),
+        quizClient.findQuestionsForQuiz(qid as string),
+      ]);
+      if (data) {
+        const total = questions.reduce((sum: number, q: any) => sum + (q.points || 0), 0);
+        setCalculatedPoints(total);
+        setQuiz({ ...data, points: total });
+      }
+    })();
+  }, [activeTab, qid]);
 
   const handleSave = async () => {
     if (qid === "new") {
@@ -63,11 +72,9 @@ export default function QuizEditor() {
       dispatch(addQuiz(created));
       router.push(`/courses/${cid}/quizzes/${created._id}`);
     } else {
-      // Re-fetch the quiz from server to get latest points/numberOfQuestions
       const freshQuiz = await quizClient.findQuizById(qid as string);
       const quizToSave = {
         ...quiz,
-        points: freshQuiz?.points ?? quiz.points,
         numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
       };
       await quizClient.updateQuiz(quizToSave);
@@ -82,12 +89,10 @@ export default function QuizEditor() {
       const created = await quizClient.createQuiz(cid as string, updatedQuiz);
       dispatch(addQuiz(created));
     } else {
-      // Re-fetch the quiz from server to get latest points/numberOfQuestions
       const freshQuiz = await quizClient.findQuizById(qid as string);
       const updatedQuiz = {
         ...quiz,
         published: true,
-        points: freshQuiz?.points ?? quiz.points,
         numberOfQuestions: freshQuiz?.numberOfQuestions ?? quiz.numberOfQuestions,
       };
       await quizClient.updateQuiz(updatedQuiz);
@@ -164,11 +169,14 @@ export default function QuizEditor() {
             <FormControl
               type="number"
               value={quiz.points}
-              disabled
+              onChange={(e) => setQuiz({ ...quiz, points: parseInt(e.target.value) || 0 })}
+              isInvalid={quiz.points !== calculatedPoints}
             />
-            <Form.Text className="text-muted">
-              Points are automatically calculated from the total points of all questions.
-            </Form.Text>
+            {quiz.points !== calculatedPoints && (
+              <Form.Control.Feedback type="invalid">
+                Points do not match the total question points ({calculatedPoints}).
+              </Form.Control.Feedback>
+            )}
           </div>
 
           <div className="mb-3">
